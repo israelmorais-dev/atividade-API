@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -40,8 +41,15 @@ func listUsers(w http.ResponseWriter, r *http.Request) {
 }
 func create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	body, erro := ioutil.ReadAll(r.Body)
+	if erro != nil {
+	}
+	var newUser User
+	json.Unmarshal(body, &newUser)
+	Users = append(Users, newUser)
+
 	encoder := json.NewEncoder(w)
-	encoder.Encode(Users[0])
+	encoder.Encode(newUser)
 }
 
 func routerUsers(w http.ResponseWriter, r *http.Request) {
