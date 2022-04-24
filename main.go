@@ -24,21 +24,66 @@ var Users []User = []User{
 	},
 	{
 		Id:         2,
-		Name:       "Bruno Ferreira",
+		Name:       "Morais",
 		University: "UniJuazeiro",
 		Course:     "Sistemas de Informação",
 	},
+}
+
+// @title           Swagger API-Users
+// @version         1.0
+// @description     Documentação da API de Users.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API-Users Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+
+func main() {
+	fmt.Println("Servidor rodando")
+	// port := os.Getenv("PORT")
+	// router := mux.NewRouter()
+	http.HandleFunc("/", home)
+	http.HandleFunc("/users", routerUsers)
+	// http.HandleFunc("/users", createUsers)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Bem vindo")
 }
 
+// ShowAllUsers godoc
+// @Summary      Show all users
+// @Description  List all users
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  User
+// @Router       /users [get]
+
 func listUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	encoder.Encode(Users)
 }
+
+// ShowAllcreate godoc
+// @Summary      Show all create
+// @Description  Create all create
+// @Tags         create
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  User
+// @Router       /users [post]
+
 func create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(201)
@@ -60,20 +105,4 @@ func routerUsers(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 		create(w, r)
 	}
-}
-
-func router() {
-	http.HandleFunc("/", home)
-	http.HandleFunc("/users", routerUsers)
-	// http.HandleFunc("/users", createUsers)
-}
-
-func Server() {
-	router()
-	fmt.Println("Servidor rodando")
-	log.Fatal(http.ListenAndServe(":8081", nil))
-}
-
-func main() {
-	Server()
 }

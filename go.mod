@@ -18,7 +18,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/swaggo/swag v1.8.1 // indirect
-	github.com/urfave/cli/v2 v2.4.4 // indirect
+	github.com/urfave/cli/v2 v2.4.8 // indirect
 	golang.org/x/net v0.0.0-20220421235706-1d1ef9303861 // indirect
 	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150 // indirect
 	golang.org/x/text v0.3.7 // indirect
