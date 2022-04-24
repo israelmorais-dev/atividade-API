@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 type User struct {
@@ -16,33 +14,56 @@ type User struct {
 	Course     string `json:"course"`
 }
 
-type allUsers []User
-
-var users = allUsers{
+var Users []User = []User{
 	{
 		Id:         1,
 		Name:       "Israel Morais",
 		University: "UniJuazeiro",
 		Course:     "Sistemas de Informação",
 	},
+	{
+		Id:         2,
+		Name:       "Bruno Ferreira",
+		University: "UniJuazeiro",
+		Course:     "Sistemas de Informação",
+	},
+}
+
+func home(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Bem vindo")
+}
+
+func listUsers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.Encode(Users)
+}
+func create(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	encoder.Encode(Users[0])
+}
+
+func routerUsers(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		listUsers(w, r)
+	} else if r.Method == "POST" {
+		create(w, r)
+	}
+}
+
+func router() {
+	http.HandleFunc("/", home)
+	http.HandleFunc("/users", routerUsers)
+	// http.HandleFunc("/users", createUsers)
+}
+
+func Server() {
+	router()
+	fmt.Println("Servidor rodando")
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
 func main() {
-	log.Println("Starting API")
-	router := mux.NewRouter()
-	router.HandleFunc("/", Home)
-	router.HandleFunc("/users", GetAllUsers).Methods("GET")
-
-	http.ListenAndServe(":8080", router)
-}
-
-func Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Aplicação em execução!\n")
-}
-
-func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	log.Println("Acessando o endpoint get all user")
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(users)
+	Server()
 }
