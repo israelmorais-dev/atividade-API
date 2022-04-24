@@ -41,11 +41,13 @@ func listUsers(w http.ResponseWriter, r *http.Request) {
 }
 func create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
 	body, erro := ioutil.ReadAll(r.Body)
 	if erro != nil {
 	}
 	var newUser User
 	json.Unmarshal(body, &newUser)
+	newUser.Id = len(Users) + 1
 	Users = append(Users, newUser)
 
 	encoder := json.NewEncoder(w)
